@@ -1305,3 +1305,61 @@ footer {
   font-size: 0.82rem; color: var(--text2);
 }
 .highlight-item i { color: #22c55e; font-size: 0.75rem; }
+
+/* ============================================
+   REVIEW FORM & EMPTY STATE
+   ============================================ */
+.testi-empty {
+  text-align: center;
+  padding: 3rem 2rem;
+  border: 2px dashed rgba(255,255,255,0.1);
+  border-radius: 1.2rem;
+  margin: 2rem 0;
+}
+.testi-empty-icon {
+  font-size: 3rem;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+.testi-empty h3 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+.testi-empty p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.review-form-wrap {
+  margin-top: 3rem;
+  background: var(--surface);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 1.2rem;
+  padding: 2rem;
+}
+.review-form-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--text);
+}
+.review-form-title i { color: var(--accent); }
+
+/* Star rating */
+.star-rating {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+}
+.star {
+  font-size: 1.6rem;
+  color: rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: color 0.15s, transform 0.15s;
+}
+.star.active, .star:hover { color: #f59e0b; }
+.star:hover { transform: scale(1.2); }
