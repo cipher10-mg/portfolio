@@ -403,88 +403,75 @@
     <div class="container">
       <div class="section-label">06 — Testimonials</div>
       <h2 class="section-title">Client reviews<span class="accent">.</span></h2>
-      <p class="section-sub">What clients say after working with me — honest feedback from real projects.</p>
+      <p class="section-sub">Have we worked together? Leave your feedback below — it helps future clients trust my work.</p>
 
       <!-- Upwork banner -->
       <a href="https://www.upwork.com/freelancers/~01395c7d0fdff1eb75" target="_blank" class="upwork-reviews-banner">
         <div class="upwork-banner-left">
           <i class="fa-brands fa-upwork"></i>
           <div>
-            <div class="upwork-banner-title">Also see my reviews on Upwork</div>
-            <div class="upwork-banner-sub">All verified client reviews from completed projects</div>
+            <div class="upwork-banner-title">See my verified reviews on Upwork</div>
+            <div class="upwork-banner-sub">All reviews from real completed projects</div>
           </div>
         </div>
         <span class="upwork-banner-cta">View profile <i class="fa-solid fa-arrow-right"></i></span>
       </a>
 
-      <!-- Testimonials grid -->
-      <div class="testi-grid" id="testiGrid">
-
-        <!-- Testimonial card 1 — placeholder (à remplacer par vrai retour client) -->
-        <div class="testi-card">
-          <div class="testi-top">
-            <div class="testi-avatar">JM</div>
-            <div class="testi-meta">
-              <div class="testi-name">Jean-Marie K.</div>
-              <div class="testi-role">Startup Founder • Douala</div>
-            </div>
-            <div class="testi-stars">
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-            </div>
-          </div>
-          <p class="testi-text">"Owen cleaned and analyzed 3 months of our sales data in Python. The dashboard he built with Plotly saved us hours every week. Very rigorous, delivered on time, and communicated clearly throughout."</p>
-          <div class="testi-project"><i class="fa-solid fa-chart-line"></i> Sales Data Analysis</div>
-        </div>
-
-        <!-- Testimonial card 2 — placeholder -->
-        <div class="testi-card">
-          <div class="testi-top">
-            <div class="testi-avatar">SL</div>
-            <div class="testi-meta">
-              <div class="testi-name">Sophie L.</div>
-              <div class="testi-role">E-commerce Manager • France</div>
-            </div>
-            <div class="testi-stars">
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-            </div>
-          </div>
-          <p class="testi-text">"Excellent work on our customer segmentation project. Owen used Python and SQL to extract insights from our database that we never noticed before. Will definitely hire again."</p>
-          <div class="testi-project"><i class="fa-solid fa-users"></i> Customer Segmentation</div>
-        </div>
-
-        <!-- ADD YOUR REAL TESTIMONIAL HERE -->
-        <div class="testi-card testi-add">
-          <div class="testi-add-inner">
-            <i class="fa-solid fa-quote-left"></i>
-            <p>Your testimonial could be here.<br>Work with me and share your feedback!</p>
-            <a href="#contact" class="btn-ghost" style="font-size:0.82rem; padding: 0.5rem 1.2rem;">Start a project</a>
-          </div>
-        </div>
-
+      <!-- Empty state -->
+      <div class="testi-empty" id="testiEmpty">
+        <div class="testi-empty-icon"><i class="fa-solid fa-comment-dots"></i></div>
+        <h3>No reviews yet — be the first!</h3>
+        <p>If we've worked together, your honest feedback means a lot.<br>Fill in the form below to leave your review.</p>
       </div>
 
-      <!-- CTA to leave a review -->
-      <div class="testi-cta">
-        <div class="testi-cta-text">
-          <h3>Worked with me recently?</h3>
-          <p>Your feedback helps me grow and helps future clients make informed decisions.</p>
-        </div>
-        <div class="testi-cta-btns">
-          <a href="https://www.upwork.com/freelancers/~01395c7d0fdff1eb75" target="_blank" class="btn-primary">
-            <i class="fa-brands fa-upwork"></i> Leave a review on Upwork
-          </a>
-          <a href="#contact" class="btn-ghost">Send me a message</a>
-        </div>
+      <!-- Reviews grid (hidden until reviews added) -->
+      <div class="testi-grid" id="testiGrid" style="display:none;"></div>
+
+      <!-- Leave a review form -->
+      <div class="review-form-wrap">
+        <h3 class="review-form-title"><i class="fa-solid fa-pen-to-square"></i> Leave a review</h3>
+        <form class="review-form" id="reviewForm" action="https://formspree.io/f/mjgdwrzw" method="POST">
+          <input type="hidden" name="_subject" value="New review on portfolio">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Your name *</label>
+              <input type="text" name="reviewer_name" placeholder="John Doe" required>
+            </div>
+            <div class="form-group">
+              <label>Your role / company</label>
+              <input type="text" name="reviewer_role" placeholder="CEO at Company">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Project we worked on *</label>
+            <input type="text" name="project" placeholder="e.g. Sales Data Analysis" required>
+          </div>
+          <div class="form-group">
+            <label>Your rating *</label>
+            <div class="star-rating" id="starRating">
+              <span class="star" data-v="1"><i class="fa-solid fa-star"></i></span>
+              <span class="star" data-v="2"><i class="fa-solid fa-star"></i></span>
+              <span class="star" data-v="3"><i class="fa-solid fa-star"></i></span>
+              <span class="star" data-v="4"><i class="fa-solid fa-star"></i></span>
+              <span class="star" data-v="5"><i class="fa-solid fa-star"></i></span>
+            </div>
+            <input type="hidden" name="rating" id="ratingInput" value="5">
+          </div>
+          <div class="form-group">
+            <label>Your review *</label>
+            <textarea name="review_text" rows="4" placeholder="Share your experience working with me..." required></textarea>
+          </div>
+          <button type="submit" class="btn-primary full-w">
+            Submit review <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </form>
       </div>
 
     </div>
   </section>
 
-  <!-- FOOTER -->
+
+    <!-- FOOTER -->
   <footer>
     <div class="footer-inner">
       <div class="footer-logo">G<span class="accent">.</span>Owen</div>
