@@ -2,6 +2,9 @@
    GAUTIER OWEN ADOULE — PORTFOLIO JS
    ============================================ */
 
+// ---- EMAILJS INIT ----
+emailjs.init('-OTPui2GMwO3gijo6');
+
 // ---- CUSTOM CURSOR ----
 const cursor = document.getElementById('cursor');
 const cursorFollower = document.getElementById('cursorFollower');
@@ -84,15 +87,8 @@ document.querySelectorAll('.mob-link').forEach(link => {
 });
 
 // ---- TYPEWRITER ----
-const twTexts = [
-  'decisions.',
-  'insights.',
-  'stories.',
-  'value.'
-];
-let twIndex = 0;
-let twChar = 0;
-let twDeleting = false;
+const twTexts = ['decisions.', 'insights.', 'stories.', 'value.'];
+let twIndex = 0, twChar = 0, twDeleting = false;
 const twEl = document.getElementById('twText');
 
 function typewriter() {
@@ -125,13 +121,10 @@ const reveals = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry, i) => {
     if (entry.isIntersecting) {
-      setTimeout(() => {
-        entry.target.classList.add('visible');
-      }, i * 80);
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
     }
   });
 }, { threshold: 0.12 });
-
 reveals.forEach(el => observer.observe(el));
 
 // ---- SKILL BARS ----
@@ -139,15 +132,14 @@ const skillBars = document.querySelectorAll('.skill-fill');
 const skillObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      const w = entry.target.getAttribute('data-w');
-      entry.target.style.width = w + '%';
+      entry.target.style.width = entry.target.getAttribute('data-w') + '%';
       skillObserver.unobserve(entry.target);
     }
   });
 }, { threshold: 0.3 });
 skillBars.forEach(bar => skillObserver.observe(bar));
 
-// ---- CONTACT FORM (Formspree) ----
+// ---- CONTACT FORM (EmailJS) ----
 const form = document.getElementById('contactForm');
 if (form) {
   form.addEventListener('submit', async (e) => {
@@ -157,24 +149,25 @@ if (form) {
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
     btn.disabled = true;
 
-    const data = new FormData(form);
+    const nameVal = form.querySelector('input[placeholder="Your name"]').value;
+    const emailVal = form.querySelector('input[type="email"]').value;
+    const subjectVal = form.querySelector('input[placeholder="How can I help?"]').value;
+    const messageVal = form.querySelector('textarea').value;
+
     try {
-      const res = await fetch(form.action, {
-        method: 'POST',
-        body: data,
-        headers: { 'Accept': 'application/json' }
+      await emailjs.send('service_z9gfk4u', 'template_9mkdin9', {
+        from_name: nameVal,
+        reply_to: emailVal,
+        subject: subjectVal,
+        message: messageVal
       });
-      if (res.ok) {
-        btn.innerHTML = '<i class="fa-solid fa-check"></i> Message sent!';
-        btn.style.background = '#22c55e';
-        form.reset();
-      } else {
-        btn.innerHTML = '<i class="fa-solid fa-xmark"></i> Error — try again';
-        btn.style.background = '#ef4444';
-      }
-    } catch {
+      btn.innerHTML = '<i class="fa-solid fa-check"></i> Message sent!';
+      btn.style.background = '#22c55e';
+      form.reset();
+    } catch (err) {
       btn.innerHTML = '<i class="fa-solid fa-xmark"></i> Error — try again';
       btn.style.background = '#ef4444';
+      console.error('EmailJS error:', err);
     }
     setTimeout(() => {
       btn.innerHTML = original;
@@ -184,38 +177,7 @@ if (form) {
   });
 }
 
-// ---- SMOOTH SCROLL for all anchor links ----
-document.querySelectorAll('a[href^="#"]').forEach(link => {
-  link.addEventListener('click', e => {
-    const target = document.querySelector(link.getAttribute('href'));
-    if (target) {
-      e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  });
-});
-
-// ---- TESTIMONIALS auto-scroll (carousel on mobile) ----
-function initTestiCarousel() {
-  if (window.innerWidth > 768) return;
-  const grid = document.getElementById('testiGrid');
-  if (!grid) return;
-  const cards = grid.querySelectorAll('.testi-card:not(.testi-add)');
-  if (cards.length < 2) return;
-
-  let current = 0;
-  grid.style.overflow = 'hidden';
-  grid.style.position = 'relative';
-
-  grid.style.display = 'flex';
-  grid.style.flexDirection = 'column';
-  grid.style.gap = '1rem';
-}
-
-initTestiCarousel();
-window.addEventListener('resize', initTestiCarousel);
-
-// ---- STAR RATING ----
+// ---- REVIEW FORM (EmailJS) ----
 const stars = document.querySelectorAll('.star');
 const ratingInput = document.getElementById('ratingInput');
 if (stars.length) {
@@ -223,28 +185,20 @@ if (stars.length) {
     star.addEventListener('click', () => {
       const val = parseInt(star.getAttribute('data-v'));
       ratingInput.value = val;
-      stars.forEach(s => {
-        s.classList.toggle('active', parseInt(s.getAttribute('data-v')) <= val);
-      });
+      stars.forEach(s => s.classList.toggle('active', parseInt(s.getAttribute('data-v')) <= val));
     });
     star.addEventListener('mouseenter', () => {
       const val = parseInt(star.getAttribute('data-v'));
-      stars.forEach(s => {
-        s.classList.toggle('active', parseInt(s.getAttribute('data-v')) <= val);
-      });
+      stars.forEach(s => s.classList.toggle('active', parseInt(s.getAttribute('data-v')) <= val));
     });
   });
   document.getElementById('starRating').addEventListener('mouseleave', () => {
     const val = parseInt(ratingInput.value);
-    stars.forEach(s => {
-      s.classList.toggle('active', parseInt(s.getAttribute('data-v')) <= val);
-    });
+    stars.forEach(s => s.classList.toggle('active', parseInt(s.getAttribute('data-v')) <= val));
   });
-  // Set default 5 stars active
   stars.forEach(s => s.classList.add('active'));
 }
 
-// ---- REVIEW FORM ----
 const reviewForm = document.getElementById('reviewForm');
 if (reviewForm) {
   reviewForm.addEventListener('submit', async (e) => {
@@ -253,23 +207,26 @@ if (reviewForm) {
     const original = btn.innerHTML;
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
     btn.disabled = true;
-    const data = new FormData(reviewForm);
+
+    const nameVal = reviewForm.querySelector('input[name="reviewer_name"]').value;
+    const roleVal = reviewForm.querySelector('input[name="reviewer_role"]').value;
+    const projectVal = reviewForm.querySelector('input[name="project"]').value;
+    const ratingVal = ratingInput.value;
+    const reviewVal = reviewForm.querySelector('textarea').value;
+
     try {
-      const res = await fetch(reviewForm.action, {
-        method: 'POST', body: data,
-        headers: { 'Accept': 'application/json' }
+      await emailjs.send('service_z9gfk4u', 'template_9mkdin9', {
+        from_name: nameVal,
+        reply_to: 'noreply@portfolio.com',
+        subject: 'New review — ' + projectVal + ' (' + ratingVal + '/5 stars)',
+        message: 'Role: ' + roleVal + '\nProject: ' + projectVal + '\nRating: ' + ratingVal + '/5\nReview: ' + reviewVal
       });
-      if (res.ok) {
-        btn.innerHTML = '<i class="fa-solid fa-check"></i> Review sent — thank you!';
-        btn.style.background = '#22c55e';
-        reviewForm.reset();
-        stars.forEach(s => s.classList.add('active'));
-        ratingInput.value = 5;
-      } else {
-        btn.innerHTML = '<i class="fa-solid fa-xmark"></i> Error — try again';
-        btn.style.background = '#ef4444';
-      }
-    } catch {
+      btn.innerHTML = '<i class="fa-solid fa-check"></i> Review sent — thank you!';
+      btn.style.background = '#22c55e';
+      reviewForm.reset();
+      stars.forEach(s => s.classList.add('active'));
+      ratingInput.value = 5;
+    } catch (err) {
       btn.innerHTML = '<i class="fa-solid fa-xmark"></i> Error — try again';
       btn.style.background = '#ef4444';
     }
@@ -280,3 +237,26 @@ if (reviewForm) {
     }, 4000);
   });
 }
+
+// ---- SMOOTH SCROLL ----
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', e => {
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// ---- TESTIMONIALS CAROUSEL MOBILE ----
+function initTestiCarousel() {
+  if (window.innerWidth > 768) return;
+  const grid = document.getElementById('testiGrid');
+  if (!grid) return;
+  grid.style.display = 'flex';
+  grid.style.flexDirection = 'column';
+  grid.style.gap = '1rem';
+}
+initTestiCarousel();
+window.addEventListener('resize', initTestiCarousel);
