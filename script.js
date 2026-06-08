@@ -214,3 +214,69 @@ function initTestiCarousel() {
 
 initTestiCarousel();
 window.addEventListener('resize', initTestiCarousel);
+
+// ---- STAR RATING ----
+const stars = document.querySelectorAll('.star');
+const ratingInput = document.getElementById('ratingInput');
+if (stars.length) {
+  stars.forEach(star => {
+    star.addEventListener('click', () => {
+      const val = parseInt(star.getAttribute('data-v'));
+      ratingInput.value = val;
+      stars.forEach(s => {
+        s.classList.toggle('active', parseInt(s.getAttribute('data-v')) <= val);
+      });
+    });
+    star.addEventListener('mouseenter', () => {
+      const val = parseInt(star.getAttribute('data-v'));
+      stars.forEach(s => {
+        s.classList.toggle('active', parseInt(s.getAttribute('data-v')) <= val);
+      });
+    });
+  });
+  document.getElementById('starRating').addEventListener('mouseleave', () => {
+    const val = parseInt(ratingInput.value);
+    stars.forEach(s => {
+      s.classList.toggle('active', parseInt(s.getAttribute('data-v')) <= val);
+    });
+  });
+  // Set default 5 stars active
+  stars.forEach(s => s.classList.add('active'));
+}
+
+// ---- REVIEW FORM ----
+const reviewForm = document.getElementById('reviewForm');
+if (reviewForm) {
+  reviewForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = reviewForm.querySelector('button[type="submit"]');
+    const original = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+    btn.disabled = true;
+    const data = new FormData(reviewForm);
+    try {
+      const res = await fetch(reviewForm.action, {
+        method: 'POST', body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Review sent — thank you!';
+        btn.style.background = '#22c55e';
+        reviewForm.reset();
+        stars.forEach(s => s.classList.add('active'));
+        ratingInput.value = 5;
+      } else {
+        btn.innerHTML = '<i class="fa-solid fa-xmark"></i> Error — try again';
+        btn.style.background = '#ef4444';
+      }
+    } catch {
+      btn.innerHTML = '<i class="fa-solid fa-xmark"></i> Error — try again';
+      btn.style.background = '#ef4444';
+    }
+    setTimeout(() => {
+      btn.innerHTML = original;
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 4000);
+  });
+}
